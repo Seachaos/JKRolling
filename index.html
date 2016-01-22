@@ -43,15 +43,30 @@
 <h3>
 <a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option / 參數</h3>
 
-<p></p>
+<b>Baisc Example / 基本範例</b>
 <pre>
-	$.jkrolling.apply( $('#demo'), './demo.jpg', {
-		sliceNum : 300, // 切片數量 | set slice num (for more smooth)
-		centerKeepRange : 0.2, // 中間保留範圍
-		rollingDeep : 0.5, // 滾動深度
-		rollingType : $.jkrolling.type_straight // 滾動類型
-	});
+	$.jkrolling.apply( $('#demo'), './demo.jpg');
 </pre>
+<p>
+第二個參數為圖片，目前是一張很長的圖(未來可以多圖串接)
+</p>
+<b>特別設定</b>
+<pre>
+  $.jkrolling.apply( $('#demo'), './demo.jpg', {
+      sliceNum : 300, // 切片數量 | set slice num (for more smooth)
+      centerKeepRange : 0.2, // 中間保留範圍
+      rollingDeep : 0.5, // 滾動深度
+      rollingType : $.jkrolling.type_roller // 滾動類型
+  });
+</pre>
+第三個參數為客制化設定參數，說明於下方
+
+
+<h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>參數說明</h3>
+<p>sliceNum : 切片數量，影響順暢度和鋸齒</p>
+<p>centerKeepRange : 中間保留範圍，越大中間越不會滾動</p>
+<p>To be continue... / 待補…</p>
 
 <h3>
 <a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>未來規畫</h3>
@@ -60,6 +75,7 @@
 <ul>
 	<li>更多效果</li>
 	<li>更多參數</li>
+  <li>多圖串接</li>
 	<li>...</li>
 </ul>
 
