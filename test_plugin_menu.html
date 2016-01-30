@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="./style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./res/jquery-1.11.3.min.js" ></script>
+	<script type="text/javascript" src="./jkrolling.js" ></script>
+	<script type="text/javascript" src="./plugin/jkmenu.js" ></script>
+</head>
+<body>
+	<div id="demo" >
+	</div>
+	<div id="menu" style="background:#FFF; border:1px #CCC solid; color:#666; position:fixed; top:20px; left:20px; padding:10px; ">
+		MENU
+	</div>
+	<script type="text/javascript">
+		// 設定高度給#demo
+		// set height for #demo
+		$('#demo').height($(window).height());
+
+		// 啟用 JKRolling
+		// enable JKRolling
+		$.jkrolling.apply( $('#demo'), './demo.jpg', {
+			sliceNum : 300, // 切片數量 | set slice num (for more smooth)
+			centerKeepRange : 0.2, // 中間保留範圍
+			rollingDeep : 0.5, // 滾動深度
+			rollingType : $.jkrolling.type_roller // 滾動類型
+		});
+
+		$.jkmenu.apply( $('#menu'));
+	</script>
+</body>
+</html>
