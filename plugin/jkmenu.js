@@ -70,6 +70,7 @@ function JKRolling_Menu(){
 
 	this.float_move_range = 0.1;
 	this.float_x = 0;
+	this.background = '#000';
 }
 
 // for gen uuid
@@ -121,7 +122,6 @@ JKRolling_Menu.prototype.hide = function(){
 
 // render menu canvas
 JKRolling_Menu.prototype.render = function(){
-	console.log('R');
 	switch(this.menu_style){
 		case 'Slash':
 			this._render_slash(1);
@@ -146,7 +146,7 @@ JKRolling_Menu.prototype._render_slash = function(slash_direct){
 
 	ctx.beginPath();
 	ctx.rect(0, 0, this.width, this.height);
-	ctx.fillStyle = "red";
+	ctx.fillStyle = this.background;
 	ctx.fill();
 
 	var scaleBl = 1 + this.float_move_range;
@@ -194,24 +194,43 @@ JKRolling_Menu.prototype._render_slash_sction = function(mouseFound, slash_direc
 	var ctx = this.ctx;
 	var title = item.title;
 	// console.log('i:'+ index + '|' + preWidth + '/' + preHeight +'|' + title );
-	var sy = 0, sx = preWidth * index;
+	var sy = 0, ox = preWidth * index, sx = ox;
+
+	var me = this;
+	var width_move = -(preWidth /2) / splitNum;
+	width_move *= slash_direct;
 
 	
-	function drawRectBorder(sx,sy,ex,ey){
+	function drawRectBorder(sx,sy,ex,ey, ax){
 		ctx.beginPath();
-		ctx.lineWidth="2";
+		ctx.lineWidth="4";
 		ctx.rect(sx,sy,ex - sx,ey - ey); 
 		ctx.stroke();
 	}
 
-	var drawFunction = drawRectBorder;
-	if(true){ // draw color background
-		ctx.strokeStyle= item.background || "#CCC";
-	}else if(false){ // draw image
-		// TODO
+	function drawRectImage(sx,sy,ex,ey, ax){
+		if(!item.img_width){
+			return;
+		}
+		var img = item.img;
+		var img_width = item.img_width;
+
+		var width = ex - sx;
+		var bl = me.height > item.img_height ? (item.img_height / me.height) : ((preWidth * (1+me.float_move_range)) / img_width);
+		var is = Math.abs(sx-ox);
+		is = slash_direct >0? (img_width * 0.3 - is * bl):is*bl;
+		ctx.drawImage(img,
+			is, sy*bl,  width*bl, (ey - sy)*bl,
+			sx, sy, width, ey - sy +1
+			);
 	}
-	var width_move = -(preWidth /2) / splitNum;
-	width_move *= slash_direct;
+
+	var drawFunction = drawRectBorder;
+	if(item.background_img){ // draw image
+		drawFunction = drawRectImage;
+	}else{ // draw color background
+		ctx.strokeStyle= item.background || "#CCC";
+	}
 
 	var startX = sx, startY = sy;
 	for(var ax=1;ax<splitNum;ax++){
@@ -220,7 +239,7 @@ JKRolling_Menu.prototype._render_slash_sction = function(mouseFound, slash_direc
 		if(mouseFound== -1 && this.eventX >sx && this.eventX <ex && this.eventY >= sy && this.eventY <= ey ){
 			mouseFound = index;
 		}
-		drawFunction(sx,sy,ex,ey);
+		drawFunction(sx,sy,ex,ey, ax);
 		sy = ey;
 		sx += width_move;
 	}
@@ -255,6 +274,30 @@ JKRolling_Menu.prototype.click = function(){
 	}
 }
 
+JKRolling_Menu.prototype.load_images = function(){
+	var dom = this.menu_dom;
+	var me = this;
+	for(var i in this.menu){
+		var item = this.menu[i];
+		if(!item.background_img){
+			continue;
+		}
+		var src = item.background_img;
+		var img_id = this.uuid();
+		var img = $('<img id="'+img_id+'" />');
+		img.attr('src', src);
+		img.css('display','none');
+		img[0].item = item;
+		img.load(function(){
+			var item = this.item;
+			item.img_width = parseFloat(this.width);
+			item.img_height = parseFloat(this.height);
+		});
+		dom.append(img);
+		item.img = document.getElementById(img_id);
+	}
+}
+
 JKRolling_Menu.prototype.apply = function(btn_dom){
 	var me = this;
 
@@ -266,6 +309,8 @@ JKRolling_Menu.prototype.apply = function(btn_dom){
 	this.menu_dom = $('<div style="background:#000;position:fixed;left:0px;top:0px;display:none;" />');
 	this.menu_dom.append(this.jcanvas);
 	$('body').append(this.menu_dom);
+
+	this.load_images();
 
 	// prepare ctx
 	this.canvas = document.getElementById(canvas_id);

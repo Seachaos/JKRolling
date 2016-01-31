@@ -20,14 +20,47 @@
 
 		// 啟用 JKRolling
 		// enable JKRolling
-		$.jkrolling.apply( $('#demo'), './demo.jpg', {
+		$.jkrolling.apply( $('#demo'), './images/demo.jpg', {
 			sliceNum : 300, // 切片數量 | set slice num (for more smooth)
 			centerKeepRange : 0.2, // 中間保留範圍
 			rollingDeep : 0.5, // 滾動深度
 			rollingType : $.jkrolling.type_roller // 滾動類型
 		});
 
-		$.jkmenu.apply( $('#menu'));
+		$.jkmenu.apply( $('#menu'), [
+		{ // 最右邊
+			title:'START',
+			color:'#FF6',
+			background:'#350',
+		}, {
+			title:'JKRolling',
+			color:'#FFF',
+			click:'http://seachaos.github.io/JKRolling/',
+			background_img:'./images/demo_1.jpg',
+			url_new_window:true
+		}, {
+			color:'#630',
+			background_img:'./images/demo_2.jpg',
+			title:'First',
+			click:function(){
+				alert('First Click');
+			}
+		}, {
+			color:'#FFF',
+			background:'#999',
+			title:'關閉選單',
+			click:':close'
+		}, {
+			color:'#AFA',
+			background:'#999',
+			background_img:'./images/demo_3.jpg',
+			title:'松鼠!',
+		}, { // 最右邊
+			title:'END',
+			color:'#FF6',
+			background:'#953'
+		}
+	]);
 	</script>
 </body>
 </html>
